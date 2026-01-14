@@ -1,5 +1,5 @@
-function App() {
-  return <div>Hello World</div>;
-}
+import { ProjectsPage } from "@/pages/projects/ProjectsPage";
 
-export default App;
+export function App() {
+  return <ProjectsPage />;
+}

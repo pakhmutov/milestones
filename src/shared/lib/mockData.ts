@@ -1,4 +1,4 @@
-import type { Project } from '@/shared/types';
+import type { Project } from '@/entities/project';
 
 export const mockProjects: Project[] = [
   {
