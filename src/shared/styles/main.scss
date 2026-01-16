@@ -1,6 +1,7 @@
-@use "./reset";
-@use "./typography";
-@use "./themes";
+@use './reset';
+@use './typography';
+@use './themes';
+@use './variables';
 
 * {
   margin: 0;
@@ -9,7 +10,7 @@
 }
 
 body {
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: var(--color-text-primary);

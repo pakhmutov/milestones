@@ -1,0 +1,22 @@
+:root {
+  --border-radius-xs: 3px;
+  --border-radius-s: 5px;
+  --border-radius-m: 6px;
+  --border-radius-l: 8px;
+  --border-radius-xl: 10px;
+  --border-radius-xxl: 16px;
+
+  --spacing-base: 4px;
+  --spacing-0: calc(var(--spacing-base) * 0);
+  --spacing-half: calc(var(--spacing-base) * 0.5);
+  --spacing-1: var(--spacing-base);
+  --spacing-2: calc(var(--spacing-base) * 2);
+  --spacing-3: calc(var(--spacing-base) * 3);
+  --spacing-4: calc(var(--spacing-base) * 4);
+  --spacing-5: calc(var(--spacing-base) * 5);
+  --spacing-6: calc(var(--spacing-base) * 6);
+  --spacing-7: calc(var(--spacing-base) * 7);
+  --spacing-8: calc(var(--spacing-base) * 8);
+  --spacing-9: calc(var(--spacing-base) * 9);
+  --spacing-10: calc(var(--spacing-base) * 10);
+}
