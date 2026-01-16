@@ -1,0 +1,10 @@
+.project-tree {
+  width: 100%;
+
+  &--empty {
+    padding: var(--spacing-10);
+    text-align: center;
+    color: var(--color-text-secondary);
+    font-size: 1.1rem;
+  }
+}
