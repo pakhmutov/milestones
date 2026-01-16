@@ -4,22 +4,29 @@
   --color-base-primary: #ffffff;
   --color-base-secondary: #f5f5f5;
   --color-base-generic: rgba(0 0 0 / 10%);
+  --color-base-generic-brand: rgba(113 197 233 / 10%);
 
   // Line
   --color-line-generic: rgba(0 0 0 / 10%);
-  --color-line-brand: #71c5e9;
+  --color-line-brand: rgb(113, 197, 233);
 
   // Text
   --color-text-primary: rgba(0 0 0 / 85%);
   --color-text-secondary: rgba(0 0 0 / 35%);
+  --color-text-complementary: rgba(0 0 0 / 55%);
   --color-text-hint: rgba(0 0 0 / 30%);
   --color-text-light: #ffffff;
+  --color-text-brand: rgb(90, 154, 182);
 
   // Semantic
   --color-base-success: #28a745;
   --color-base-notice: #ffc107;
   --color-base-info: #17a2b8;
   --color-base-default: #6c757d;
+
+  --color-base-danger: #dc3545;
+  --color-base-danger-hover: #f50e25;
+  --color-base-danger-active: #6f1b23;
 }
 
 :root[data-theme='dark'] {

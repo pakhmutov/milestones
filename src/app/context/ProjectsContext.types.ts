@@ -7,4 +7,11 @@ export interface ProjectsContextType {
   expandedNodes: Set<string>;
   toggleNode: (nodeId: string) => void;
   isNodeExpanded: (nodeId: string) => boolean;
+  updateTask: (
+    projectId: string,
+    milestoneId: string,
+    taskId: string,
+    updates: { assignee?: string; status?: string },
+  ) => void;
+  removeTask: (projectId: string, milestoneId: string, taskId: string) => void;
 }

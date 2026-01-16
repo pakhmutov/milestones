@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
 import type { Project } from '@/entities/project';
+import type { Task } from '@/entities/task';
 import { useLocalStorage } from '@/shared/lib/hooks/useLocalStorage';
 import { useDebounce } from '@/shared/lib/hooks/useDebounce';
 import { shouldExpandNode } from '@/shared/lib/utils/search';
@@ -13,7 +14,7 @@ export function ProjectsProvider({
   children: ReactNode;
   projects: Project[];
 }) {
-  const [projects] = useState<Project[]>(initialProjects);
+  const [projects, setProjects] = useState<Project[]>(initialProjects);
   const [searchQuery, setSearchQuery] = useState('');
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const [expandedNodes, setExpandedNodes] = useLocalStorage<Set<string>>(
@@ -69,6 +70,61 @@ export function ProjectsProvider({
     return expandedNodes.has(nodeId);
   };
 
+  const updateTask = (
+    projectId: string,
+    milestoneId: string,
+    taskId: string,
+    updates: { assignee?: string; status?: string },
+  ) => {
+    setProjects((prevProjects) => {
+      return prevProjects.map((project) => {
+        if (project.id !== projectId) return project;
+
+        return {
+          ...project,
+          milestones: project.milestones.map((milestone) => {
+            if (milestone.id !== milestoneId) return milestone;
+
+            return {
+              ...milestone,
+              tasks: milestone.tasks.map((task) => {
+                if (task.id !== taskId) return task;
+
+                return {
+                  ...task,
+                  ...(updates.assignee !== undefined && {
+                    assignee: updates.assignee || undefined,
+                  }),
+                  ...(updates.status !== undefined && { status: updates.status as Task['status'] }),
+                };
+              }),
+            };
+          }),
+        };
+      });
+    });
+  };
+
+  const removeTask = (projectId: string, milestoneId: string, taskId: string) => {
+    setProjects((prevProjects) => {
+      return prevProjects.map((project) => {
+        if (project.id !== projectId) return project;
+
+        return {
+          ...project,
+          milestones: project.milestones.map((milestone) => {
+            if (milestone.id !== milestoneId) return milestone;
+
+            return {
+              ...milestone,
+              tasks: milestone.tasks.filter((task) => task.id !== taskId),
+            };
+          }),
+        };
+      });
+    });
+  };
+
   return (
     <ProjectsContext.Provider
       value={{
@@ -78,6 +134,8 @@ export function ProjectsProvider({
         expandedNodes,
         toggleNode,
         isNodeExpanded,
+        updateTask,
+        removeTask,
       }}
     >
       {children}

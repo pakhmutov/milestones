@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { ArrowButton } from '@/shared/ui';
-import type { Task } from '../model/types';
+import type { Task, TaskStatus } from '../model/types';
+import { useProjects } from '@/app/context/useProjects';
+import Tag from '@/shared/assets/icons/tag.svg';
 import './TaskNode.scss';
 
 interface TaskNodeProps {
@@ -9,8 +11,23 @@ interface TaskNodeProps {
   milestoneId: string;
 }
 
+const statuses: TaskStatus[] = ['Todo', 'Doing', 'In Review', 'Done'];
+
 export function TaskNode({ task, projectId, milestoneId }: TaskNodeProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const { updateTask, projects, removeTask } = useProjects();
+
+  // Получаем всех уникальных assignees из всех задач
+  const assignees: string[] = [];
+  projects.forEach((project) => {
+    project.milestones.forEach((milestone) => {
+      milestone.tasks.forEach((task) => {
+        if (task.assignee && !assignees.includes(task.assignee)) {
+          assignees.push(task.assignee);
+        }
+      });
+    });
+  });
 
   const formatDate = (date: Date): string => {
     return new Date(date).toLocaleDateString('en-US', {
@@ -36,13 +53,17 @@ export function TaskNode({ task, projectId, milestoneId }: TaskNodeProps) {
   };
 
   const handleAssigneeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    // In a real app, this would update the task via API
-    console.log('Assignee changed:', e.target.value);
+    updateTask(projectId, milestoneId, task.id, { assignee: e.target.value });
   };
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    // In a real app, this would update the task via API
-    console.log('Status changed:', e.target.value);
+    updateTask(projectId, milestoneId, task.id, { status: e.target.value });
+  };
+
+  const handleDelete = () => {
+    if (window.confirm(`Are you sure you want to delete task "${task.title}"?`)) {
+      removeTask(projectId, milestoneId, task.id);
+    }
   };
 
   return (
@@ -83,11 +104,17 @@ export function TaskNode({ task, projectId, milestoneId }: TaskNodeProps) {
               onChange={handleAssigneeChange}
             >
               <option value="">Unassigned</option>
-              <option value="Alex">Alex</option>
-              <option value="Dmitry">Dmitry</option>
-              <option value="Vladimir">Vladimir</option>
-              <option value="John">John</option>
-              <option value="Jane">Jane</option>
+              {(() => {
+                const options: React.ReactElement[] = [];
+                assignees.forEach((assignee) => {
+                  options.push(
+                    <option key={assignee} value={assignee}>
+                      {assignee}
+                    </option>,
+                  );
+                });
+                return options;
+              })()}
             </select>
           </div>
 
@@ -101,10 +128,17 @@ export function TaskNode({ task, projectId, milestoneId }: TaskNodeProps) {
               value={task.status}
               onChange={handleStatusChange}
             >
-              <option value="Todo">Todo</option>
-              <option value="Doing">Doing</option>
-              <option value="In Review">In Review</option>
-              <option value="Done">Done</option>
+              {(() => {
+                const options: React.ReactElement[] = [];
+                statuses.forEach((status) => {
+                  options.push(
+                    <option key={status} value={status}>
+                      {status}
+                    </option>,
+                  );
+                });
+                return options;
+              })()}
             </select>
           </div>
 
@@ -119,6 +153,7 @@ export function TaskNode({ task, projectId, milestoneId }: TaskNodeProps) {
               {task.tags.length > 0 ? (
                 task.tags.map((tag, index) => (
                   <span key={index} className="task-tag">
+                    <Tag />
                     {tag}
                   </span>
                 ))
@@ -126,6 +161,17 @@ export function TaskNode({ task, projectId, milestoneId }: TaskNodeProps) {
                 <span className="task-no-tags">No tags</span>
               )}
             </div>
+          </div>
+
+          <div className="task-field">
+            <button
+              type="button"
+              className="task-delete-button"
+              onClick={handleDelete}
+              aria-label={`Delete task ${task.title}`}
+            >
+              Delete Task
+            </button>
           </div>
         </div>
       )}

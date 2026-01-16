@@ -5,7 +5,7 @@
   &__header {
     display: flex;
     align-items: center;
-    gap: var(--spacing-2);
+    gap: var(--spacing-3);
     padding: var(--spacing-2) var(--spacing-3);
     cursor: pointer;
     border-radius: var(--border-radius-m);
@@ -24,7 +24,6 @@
   &__title {
     font-weight: 500;
     color: var(--color-text-primary);
-    flex: 1;
   }
 
   &__status {
@@ -38,6 +37,7 @@
   }
 
   &__due-date {
+    margin-left: auto;
     font-size: 0.875rem;
     color: var(--color-text-secondary);
   }
@@ -45,49 +45,48 @@
   .task-accordion {
     margin-left: 16px;
     margin-top: 8px;
-    padding: 16px;
-    background-color: #f9f9f9;
-    border-radius: 4px;
-    border: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+    padding: var(--spacing-4);
+    background-color: var(--color-base-primary);
+    border-radius: var(--border-radius-l);
+    border: 1px solid var(--color-line-generic);
 
     .task-field {
-      margin-bottom: 16px;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-1);
 
       .task-label {
         display: block;
         font-weight: 600;
         font-size: 0.875rem;
-        color: #333;
-        margin-bottom: 4px;
+        color: var(--color-text-primary);
       }
 
       .task-summary {
-        color: #555;
+        color: var(--color-text-complementary);
         line-height: 1.5;
       }
 
       .task-select {
         width: 100%;
         max-width: 300px;
-        padding: 6px 12px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
+        padding: var(--spacing-2) var(--spacing-3);
+        border: 1px solid var(--color-line-generic);
+        border-radius: var(--border-radius-m);
         font-size: 0.875rem;
-        background-color: white;
         cursor: pointer;
 
         &:focus {
-          outline: 2px solid #0066cc;
+          outline: 2px solid var(--color-base-brand);
           outline-offset: 2px;
         }
       }
 
       .task-due-date-value {
-        color: #555;
+        color: var(--color-text-complementary);
       }
 
       .task-tags {
@@ -96,18 +95,46 @@
         gap: 6px;
 
         .task-tag {
-          padding: 4px 10px;
-          background-color: #e3f2fd;
-          color: #1976d2;
-          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          gap: var(--spacing-2);
+          padding: var(--spacing-1) var(--spacing-3);
+          background-color: var(--color-base-generic-brand);
+          color: var(--color-text-brand);
+          border-radius: var(--border-radius-xxl);
           font-size: 0.75rem;
           font-weight: 500;
         }
 
         .task-no-tags {
-          color: #999;
-          font-style: italic;
+          color: var(--color-text-secondary);
           font-size: 0.875rem;
+        }
+      }
+
+      .task-delete-button {
+        padding: var(--spacing-2) var(--spacing-4);
+        background-color: var(--color-base-danger);
+        color: var(--color-text-light);
+        border: none;
+        border-radius: var(--border-radius-m);
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 200ms;
+        align-self: flex-start;
+
+        &:hover {
+          background-color: var(--color-base-danger-hover);
+        }
+
+        &:focus {
+          outline: 2px solid var(--color-line-brand);
+          outline-offset: 2px;
+        }
+
+        &:active {
+          background-color: var(--color-base-danger-active);
         }
       }
     }
