@@ -3,6 +3,7 @@ import type { Project } from '../model/types';
 import { MilestoneNode } from '@/entities/milestone/ui/MilestoneNode';
 import { calculateProjectProgress } from '@/shared/lib/utils/progress';
 import { shouldExpandNode } from '@/shared/lib/utils/search';
+import { ArrowButton } from '@/shared/ui';
 import './ProjectNode.scss';
 
 interface ProjectNodeProps {
@@ -45,7 +46,7 @@ export function ProjectNode({ project }: ProjectNodeProps) {
         role="button"
         aria-expanded={isExpanded}
       >
-        <span className="project-toggle">{isExpanded ? '▼' : '▶'}</span>
+        <ArrowButton isExpanded={isExpanded} />
         <span className="project-name">{project.name}</span>
         <div className="project-progress">
           <div className="project-progress-bar">

@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { ArrowButton } from "@/shared/ui";
-import type { Task } from "../model/types";
-import "./TaskNode.scss";
+import { useState } from 'react';
+import { ArrowButton } from '@/shared/ui';
+import type { Task } from '../model/types';
+import './TaskNode.scss';
 
 interface TaskNodeProps {
   task: Task;
@@ -13,56 +13,56 @@ export function TaskNode({ task, projectId, milestoneId }: TaskNodeProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const formatDate = (date: Date): string => {
-    return new Date(date).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
+    return new Date(date).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
     });
   };
 
-  const getStatusColor = (status: Task["status"]): string => {
+  const getStatusColor = (status: Task['status']): string => {
     switch (status) {
-      case "Done":
-        return "var(--color-base-success)";
-      case "In Review":
-        return "var(--color-base-notice)";
-      case "Doing":
-        return "var(--color-base-info)";
-      case "Todo":
-        return "var(--color-base-default)";
+      case 'Done':
+        return 'var(--color-base-success)';
+      case 'In Review':
+        return 'var(--color-base-notice)';
+      case 'Doing':
+        return 'var(--color-base-info)';
+      case 'Todo':
+        return 'var(--color-base-default)';
       default:
-        return "var(--color-base-default)";
+        return 'var(--color-base-default)';
     }
   };
 
   const handleAssigneeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     // In a real app, this would update the task via API
-    console.log("Assignee changed:", e.target.value);
+    console.log('Assignee changed:', e.target.value);
   };
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     // In a real app, this would update the task via API
-    console.log("Status changed:", e.target.value);
+    console.log('Status changed:', e.target.value);
   };
 
   return (
     <div className="task-node">
       <div
-        className="task-header"
+        className="task-node__header"
         onClick={() => setIsExpanded(!isExpanded)}
         tabIndex={0}
         role="button"
         aria-expanded={isExpanded}
       >
         <ArrowButton isExpanded={isExpanded} />
-        <span className="task-title">{task.title}</span>
+        <span className="task-node__title">{task.title}</span>
         <span
-          className="task-status"
+          className="task-node__status"
           style={{ backgroundColor: getStatusColor(task.status) }}
         >
           {task.status}
         </span>
-        <span className="task-due-date">{formatDate(task.dueDate)}</span>
+        <span className="task-node__due-date">{formatDate(task.dueDate)}</span>
       </div>
 
       {isExpanded && (
@@ -79,7 +79,7 @@ export function TaskNode({ task, projectId, milestoneId }: TaskNodeProps) {
             <select
               id={`assignee-${task.id}`}
               className="task-select"
-              value={task.assignee || ""}
+              value={task.assignee || ''}
               onChange={handleAssigneeChange}
             >
               <option value="">Unassigned</option>
@@ -110,9 +110,7 @@ export function TaskNode({ task, projectId, milestoneId }: TaskNodeProps) {
 
           <div className="task-field">
             <label className="task-label">Due Date</label>
-            <div className="task-due-date-value">
-              {formatDate(task.dueDate)}
-            </div>
+            <div className="task-due-date-value">{formatDate(task.dueDate)}</div>
           </div>
 
           <div className="task-field">

@@ -2,6 +2,7 @@ import { useProjects } from '@/app/context/useProjects';
 import type { Milestone } from '../model/types';
 import { TaskNode } from '@/entities/task/ui/TaskNode';
 import { shouldExpandNode } from '@/shared/lib/utils/search';
+import { ArrowButton } from '@/shared/ui';
 import './MilestoneNode.scss';
 
 interface MilestoneNodeProps {
@@ -50,7 +51,7 @@ export function MilestoneNode({ milestone, projectId }: MilestoneNodeProps) {
         role="button"
         aria-expanded={isExpanded}
       >
-        <span className="milestone-toggle">{isExpanded ? '▼' : '▶'}</span>
+        <ArrowButton isExpanded={isExpanded} />
         <span className="milestone-name">{milestone.name}</span>
         <span className="milestone-date">{formatDate(milestone.targetDate)}</span>
       </div>
