@@ -46,3 +46,9 @@
     font-size: 0.875rem;
   }
 }
+
+@media screen and (max-width: 480px) {
+  .milestone-node .milestone-content {
+    padding-left: var(--spacing-half);
+  }
+}
