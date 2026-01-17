@@ -27,6 +27,7 @@
       border-radius: var(--border-radius-l);
       transition: border-color 0.2s, box-shadow 0.2s;
       background-color: transparent;
+      color: var(--color-text-primary);
 
       &:focus {
         outline: none;

@@ -1,7 +1,7 @@
 import { useProjects } from '@/app/context/useProjects';
 import { getVisibleTaskCount } from '@/shared/lib/utils/search';
 import './SearchBar.scss';
-import { ResetButton } from '@/shared/ui';
+import { ResetButton, ThemeButton } from '@/shared/ui';
 
 export function SearchBar() {
   const { searchQuery, setSearchQuery, projects } = useProjects();
@@ -10,6 +10,7 @@ export function SearchBar() {
   return (
     <div className="search-bar">
       <div className="search-actions">
+        <ThemeButton />
         <ResetButton />
       </div>
       <div className="search-input-wrapper">
