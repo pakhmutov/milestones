@@ -14,4 +14,5 @@ export interface ProjectsContextType {
     updates: { assignee?: string; status?: string },
   ) => void;
   removeTask: (projectId: string, milestoneId: string, taskId: string) => void;
+  resetProjects: () => void;
 }

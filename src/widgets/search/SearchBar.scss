@@ -15,7 +15,7 @@
 
     .search-label {
       font-weight: 600;
-      font-size: 0.875rem;
+      font-size: 0.95rem;
       color: var(--color-text-primary);
     }
 
@@ -38,6 +38,13 @@
         color: var(--color-text-hint);
       }
     }
+  }
+
+  .search-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--spacing-3);
   }
 
   .search-stats {

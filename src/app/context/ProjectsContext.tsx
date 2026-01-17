@@ -7,6 +7,40 @@ import { useDebounce } from '@/shared/lib/hooks/useDebounce';
 import { shouldExpandNode } from '@/shared/lib/utils/search';
 import { ProjectsContext } from './ProjectsContext.context';
 
+function restoreDates(projects: unknown[]): Project[] {
+  return projects.map((project) => {
+    const p = project as {
+      id: string;
+      name: string;
+      milestones: Array<{
+        id: string;
+        name: string;
+        targetDate: string | Date;
+        tasks: Array<{
+          id: string;
+          title: string;
+          summary: string;
+          assignee?: string;
+          status: string;
+          dueDate: string | Date;
+          tags: string[];
+        }>;
+      }>;
+    };
+    return {
+      ...p,
+      milestones: p.milestones.map((milestone) => ({
+        ...milestone,
+        targetDate: new Date(milestone.targetDate),
+        tasks: milestone.tasks.map((task) => ({
+          ...task,
+          dueDate: new Date(task.dueDate),
+        })),
+      })),
+    } as Project;
+  });
+}
+
 export function ProjectsProvider({
   children,
   projects: initialProjects,
@@ -14,7 +48,26 @@ export function ProjectsProvider({
   children: ReactNode;
   projects: Project[];
 }) {
-  const [projects, setProjects] = useState<Project[]>(initialProjects);
+  const [storedProjects, setStoredProjects] = useLocalStorage<Project[]>(
+    'milestones-projects',
+    initialProjects,
+  );
+
+  const [projects, setProjectsState] = useState<Project[]>(() => {
+    try {
+      return restoreDates(storedProjects as unknown[]);
+    } catch {
+      return initialProjects;
+    }
+  });
+
+  const setProjects = (newProjects: Project[] | ((prev: Project[]) => Project[])) => {
+    setProjectsState((prev) => {
+      const updated = typeof newProjects === 'function' ? newProjects(prev) : newProjects;
+      setStoredProjects(updated);
+      return updated;
+    });
+  };
   const [searchQuery, setSearchQuery] = useState('');
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const [expandedNodes, setExpandedNodes] = useLocalStorage<Set<string>>(
@@ -77,7 +130,7 @@ export function ProjectsProvider({
     updates: { assignee?: string; status?: string },
   ) => {
     setProjects((prevProjects) => {
-      return prevProjects.map((project) => {
+      const updated = prevProjects.map((project) => {
         if (project.id !== projectId) return project;
 
         return {
@@ -102,6 +155,7 @@ export function ProjectsProvider({
           }),
         };
       });
+      return updated;
     });
   };
 
@@ -125,6 +179,19 @@ export function ProjectsProvider({
     });
   };
 
+  const resetProjects = () => {
+    if (
+      window.confirm(
+        'Are you sure you want to reset all changes? This will restore projects to their initial state.',
+      )
+    ) {
+      setProjectsState(initialProjects);
+      setStoredProjects(initialProjects);
+      setExpandedNodes(new Set<string>());
+      setSearchQuery('');
+    }
+  };
+
   return (
     <ProjectsContext.Provider
       value={{
@@ -136,6 +203,7 @@ export function ProjectsProvider({
         isNodeExpanded,
         updateTask,
         removeTask,
+        resetProjects,
       }}
     >
       {children}

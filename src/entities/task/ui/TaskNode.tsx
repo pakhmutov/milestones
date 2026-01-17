@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { ArrowButton } from '@/shared/ui';
 import type { Task, TaskStatus } from '../model/types';
 import { useProjects } from '@/app/context/useProjects';
@@ -14,10 +13,10 @@ interface TaskNodeProps {
 const statuses: TaskStatus[] = ['Todo', 'Doing', 'In Review', 'Done'];
 
 export function TaskNode({ task, projectId, milestoneId }: TaskNodeProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const { updateTask, projects, removeTask } = useProjects();
+  const { toggleNode, isNodeExpanded, updateTask, projects, removeTask } = useProjects();
+  const nodeId = `${projectId}-${milestoneId}-${task.id}`;
+  const isExpanded = isNodeExpanded(nodeId);
 
-  // Получаем всех уникальных assignees из всех задач
   const assignees: string[] = [];
   projects.forEach((project) => {
     project.milestones.forEach((milestone) => {
@@ -35,6 +34,13 @@ export function TaskNode({ task, projectId, milestoneId }: TaskNodeProps) {
       day: 'numeric',
       year: 'numeric',
     });
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      toggleNode(nodeId);
+    }
   };
 
   const getStatusColor = (status: Task['status']): string => {
@@ -70,8 +76,9 @@ export function TaskNode({ task, projectId, milestoneId }: TaskNodeProps) {
     <div className="task-node">
       <div
         className="task-node__header"
-        onClick={() => setIsExpanded(!isExpanded)}
+        onClick={() => toggleNode(nodeId)}
         tabIndex={0}
+        onKeyDown={handleKeyDown}
         role="button"
         aria-expanded={isExpanded}
       >
