@@ -26,8 +26,10 @@ export function ProjectNode({ project }: ProjectNodeProps) {
   const visibleMilestones = project.milestones.filter((milestone) => {
     if (!searchQuery.trim()) return true;
     const query = searchQuery.toLowerCase();
+    if (project.name.toLowerCase().includes(query)) {
+      return true;
+    }
     return (
-      project.name.toLowerCase().includes(query) ||
       milestone.name.toLowerCase().includes(query) ||
       milestone.tasks.some(
         (task) =>

@@ -34,11 +34,16 @@ export function MilestoneNode({ milestone, projectId }: MilestoneNodeProps) {
   const visibleTasks = milestone.tasks.filter((task) => {
     if (!searchQuery.trim()) return true;
     const query = searchQuery.toLowerCase();
-    return (
-      milestone.name.toLowerCase().includes(query) ||
-      task.title.toLowerCase().includes(query) ||
-      task.summary.toLowerCase().includes(query)
-    );
+    const project = projects.find((p) => p.id === projectId);
+    if (project && project.name.toLowerCase().includes(query)) {
+      return true;
+    }
+
+    if (milestone.name.toLowerCase().includes(query)) {
+      return true;
+    }
+
+    return task.title.toLowerCase().includes(query) || task.summary.toLowerCase().includes(query);
   });
 
   return (
